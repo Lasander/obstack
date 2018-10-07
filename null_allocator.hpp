@@ -1,8 +1,7 @@
 #ifndef BOOST_ARENA_NULL_ALLOCATOR_HPP
 #define BOOST_ARENA_NULL_ALLOCATOR_HPP
 
-#include <boost/limits.hpp>
-#include <boost/utility.hpp>
+#include <limits>
 
 namespace boost {
 namespace arena {
