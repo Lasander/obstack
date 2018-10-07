@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <type_traits>
 
 #define BOOST_TEST_MAIN
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE obstack_test
 #include <boost/test/unit_test.hpp>
 #include <boost/function.hpp>
-#include <boost/type_traits/alignment_of.hpp>
 #include <boost/cstdint.hpp>
 
 
@@ -89,7 +89,7 @@ struct alignment_checker {
 };
 
 BOOST_AUTO_TEST_CASE(max_align_t) {
-	BOOST_CHECK( sizeof(boost::arena::max_align_t) == boost::alignment_of<alignment_checker>::value );
+	BOOST_CHECK( sizeof(boost::arena::max_align_t) == std::alignment_of<alignment_checker>::value );
 }
 
 class Sensor {
@@ -537,7 +537,7 @@ BOOST_AUTO_TEST_CASE( obstack_alloc_ptr_array ) {
 
 template<typename T>
 inline bool is_aligned(const T *p) {
-	return reinterpret_cast<size_t>(p) % boost::alignment_of<T>::value == 0;
+	return reinterpret_cast<size_t>(p) % std::alignment_of<T>::value == 0;
 }
 
 BOOST_AUTO_TEST_CASE( obstack_alloc_alignment_confusion ) {

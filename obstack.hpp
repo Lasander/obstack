@@ -5,7 +5,6 @@
 #include <memory>
 
 #include <boost/utility.hpp>
-#include <boost/type_traits/alignment_of.hpp>
 #include <boost/static_assert.hpp>
 #include <type_traits>
 
@@ -119,7 +118,7 @@ struct octet_holder {
 	typedef typename allocator_type::pointer alloc_pointer;
 
 	BOOST_STATIC_ASSERT_MSG(
-		alignment_of<alloc_value_type>::value == alignment_of<max_align_t>::value,
+		std::alignment_of<alloc_value_type>::value == std::alignment_of<max_align_t>::value,
 		"the allocator and memory must be of max_align_t type"
 	);
 
@@ -150,7 +149,7 @@ private:
 	}
 
 	static bool is_aligned(void *p) {
-		return reinterpret_cast<size_t>(p) % alignment_of<max_align_t>::value == 0;
+		return reinterpret_cast<size_t>(p) % std::alignment_of<max_align_t>::value == 0;
 	}
 
 	memory_holder_type mem_holder;
@@ -228,8 +227,8 @@ private:
 	template<typename T>
 	struct max_aligned_sizeof {
 		enum {
-			value = sizeof(T) % alignment_of<max_align_t>::value ?
-							sizeof(T) + (alignment_of<max_align_t>::value - sizeof(T)%alignment_of<max_align_t>::value)
+			value = sizeof(T) % std::alignment_of<max_align_t>::value ?
+							sizeof(T) + (std::alignment_of<max_align_t>::value - sizeof(T)%std::alignment_of<max_align_t>::value)
 							: sizeof(T)
 		};
 	};
@@ -237,8 +236,8 @@ private:
 	template<typename T>
 	struct alignment {
 		enum { value =
-			alignment_of<T>::value > alignment_of<chunk_header>::value ?
-			alignment_of<T>::value : alignment_of<chunk_header>::value
+			std::alignment_of<T>::value > std::alignment_of<chunk_header>::value ?
+			std::alignment_of<T>::value : std::alignment_of<chunk_header>::value
 		};
 	};
 

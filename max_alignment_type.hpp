@@ -1,8 +1,8 @@
 #ifndef BOOST_MAXALIGNMENT_TYPE_HPP
 #define BOOST_MAXALIGNMENT_TYPE_HPP
 
+#include <type_traits>
 #include <boost/cstdint.hpp>
-#include <boost/type_traits/alignment_of.hpp>
 
 namespace boost {
 namespace arena {
@@ -11,14 +11,14 @@ namespace detail {
 template<typename T1, typename T2, bool T1gtT2>
 struct max_alignof_impl {
 	typedef T1 type;
-	enum { value = alignment_of<type>::value };
+	enum { value = std::alignment_of<type>::value };
 };
 
 //partial specialization on false
 template<typename T1, typename T2>
 struct max_alignof_impl<T1,T2,false> {
 	typedef T2 type;
-	enum { value = alignment_of<type>::value };
+	enum { value = std::alignment_of<type>::value };
 };
 
 struct null_type {};
@@ -63,7 +63,7 @@ struct max_alignof<
 >
 {
 	typedef T1 type;
-	enum { value = alignment_of<type>::value };
+	enum { value = std::alignment_of<type>::value };
 };
 
 
@@ -82,7 +82,7 @@ struct max_alignof<
 >
 {
 private:
-	typedef max_alignof_impl<T1,T2, (alignment_of<T1>::value > alignment_of<T2>::value) > total_type;
+	typedef max_alignof_impl<T1,T2, (std::alignment_of<T1>::value > std::alignment_of<T2>::value) > total_type;
 	typedef typename total_type::type max_type;
 	enum { max_value = total_type::value };
 public:

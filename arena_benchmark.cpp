@@ -7,7 +7,6 @@
 #include <boost/random/uniform_int.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread.hpp>
-#include <boost/type_traits/alignment_of.hpp>
 #include <boost/bind.hpp>
 
 #include "obstack.hpp"
