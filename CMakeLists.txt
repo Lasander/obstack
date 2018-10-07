@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-find_package(Boost COMPONENTS unit_test_framework system REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 
 add_definitions(-pedantic -Wall -O2 -Wfatal-errors)
@@ -29,5 +29,4 @@ add_executable(arena_benchmark
 
 target_link_libraries(arena_benchmark
 	boost_arena
-    "${Boost_SYSTEM_LIBRARY}"
 )
