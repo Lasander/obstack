@@ -4,8 +4,6 @@
 #include <cassert>
 #include <cstddef>
 #include <memory>
-
-#include <boost/utility.hpp>
 #include <type_traits>
 
 #include "obstack_fwd.hpp"
@@ -206,7 +204,6 @@ private:
  */
 template<class A>
 class basic_obstack
-	: private noncopyable
 {
 private:
 	typedef arena_detail::octet_holder<A> holder_type;
@@ -262,6 +259,9 @@ public:
 	    assert(memory.mem() && "global_malloc_allocator returned NULL");
 		tos = memory.mem();
 	}
+
+    basic_obstack(const basic_obstack&) = delete;
+    basic_obstack& operator=(const basic_obstack&) = delete;
 
 	/**
 	 * \brief construct an obstack on the given memory buffer
