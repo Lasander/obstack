@@ -1,10 +1,9 @@
 #include <cstdlib>
 
 #include <iostream>
+#include <random>
 #include <vector>
 
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
@@ -17,11 +16,11 @@ using namespace boost::posix_time;
 typedef std::vector<size_t> alloc_order_vec;
 
 static alloc_order_vec make_alloc_sequence(const size_t total_memory, const size_t min_alloc_size, const size_t max_alloc_size) {
-	boost::mt19937 gen;
+	std::mt19937 gen;
 	gen.seed(42);
 	
 	alloc_order_vec out;
-	boost::uniform_int<size_t> dist(min_alloc_size, max_alloc_size);
+	std::uniform_int_distribution<size_t> dist(min_alloc_size, max_alloc_size);
 
 	size_t mem_sum = 0;
 	while(mem_sum < total_memory) {
@@ -47,7 +46,7 @@ static alloc_order_vec make_free_sequence(const alloc_order_vec &alloc_seq) {
 	alloc_order_vec out;
 	out.resize(alloc_seq.size());
 
-	boost::mt19937 gen;
+	std::mt19937 gen;
 	gen.seed(42);
 
 	alloc_order_vec positions;
@@ -57,7 +56,7 @@ static alloc_order_vec make_free_sequence(const alloc_order_vec &alloc_seq) {
 	}
 
 	for(size_t i=0; i<out.size(); i++) {
-		boost::uniform_int<size_t> dist(0, positions.size()-1);
+		std::uniform_int_distribution<size_t> dist(0, positions.size()-1);
 		const size_t k = dist(gen);
 		
 		out[i] = positions[k];

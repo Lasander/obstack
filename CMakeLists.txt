@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-find_package(Boost COMPONENTS random unit_test_framework thread system REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework thread system REQUIRED)
 
 
 add_definitions(-pedantic -Wall -O2 -Wfatal-errors)
@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD 11)
 add_library(boost_arena
 	obstack.cpp
 )
-target_link_libraries(boost_arena "${Boost_RANDOM_LIBRARY}")
+target_link_libraries(boost_arena)
 
 
 add_executable(arena_test
@@ -29,7 +29,6 @@ add_executable(arena_benchmark
 
 target_link_libraries(arena_benchmark
 	boost_arena
-	"${Boost_RANDOM_LIBRARY}"
 	"${Boost_THREAD_LIBRARY}"
     "${Boost_SYSTEM_LIBRARY}"
 )

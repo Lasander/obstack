@@ -1,9 +1,6 @@
 #include <limits>
 #include <cstdlib>
-
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int.hpp>
-
+#include <random>
 
 #include "obstack.hpp"
 
@@ -37,7 +34,7 @@ static size_t make_strong_seed() {
 }
 
 static size_t init_cookie() {
-	boost::mt19937 gen;
+	std::mt19937 gen;
 	static size_t seed = 0;
 	if(!seed) {
 		seed = make_strong_seed();
@@ -46,7 +43,7 @@ static size_t init_cookie() {
 	}
 
 	gen.seed(seed);
-	boost::uniform_int<size_t> dist(0, std::numeric_limits<size_t>::max());
+	std::uniform_int_distribution<size_t> dist(0, std::numeric_limits<size_t>::max());
 
 	size_t const cookie = dist(gen);
 	
