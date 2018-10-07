@@ -1,12 +1,12 @@
 #include <cstdlib>
 
+#include <functional>
 #include <iostream>
 #include <random>
 #include <vector>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread.hpp>
-#include <boost/bind.hpp>
 
 #include "obstack.hpp"
 #include "max_alignment_type.hpp"
@@ -329,7 +329,7 @@ static void benchmark_threaded(
 		boost::barrier start_allocs(num_threads);
 		for(size_t i=0; i<num_threads; i++) {
 			threads.create_thread(
-				boost::bind(
+				std::bind(
 					benchmark_malloc,
 					boost::ref(start_allocs),
 					boost::ref(alloc_orders[i]),
@@ -348,7 +348,7 @@ static void benchmark_threaded(
 		boost::barrier start_allocs(num_threads);
 		for(size_t i=0; i<num_threads; i++) {
 			threads.create_thread(
-				boost::bind(
+				std::bind(
 					benchmark_new_delete,
 					boost::ref(start_allocs),
 					boost::ref(alloc_orders[i]),
@@ -367,7 +367,7 @@ static void benchmark_threaded(
 		boost::barrier start_allocs(num_threads);
 		for(size_t i=0; i<num_threads; i++) {
 			threads.create_thread(
-				boost::bind(
+				std::bind(
 					benchmark_obstack,
 					boost::ref(start_allocs),
 					boost::ref(alloc_orders[i]),
