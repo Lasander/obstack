@@ -8,7 +8,6 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE obstack_test
 #include <boost/test/unit_test.hpp>
-#include <boost/function.hpp>
 
 #include "obstack.hpp"
 #include "max_alignment_type.hpp"
@@ -93,7 +92,7 @@ BOOST_AUTO_TEST_CASE(max_align_t) {
 
 class Sensor {
 public:
-	typedef boost::function0<void> dtor_callback_type;
+	using dtor_callback_type = std::function<void()>;
 
 	Sensor()
 		: this_ptr(this)
