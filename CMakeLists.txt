@@ -9,24 +9,24 @@ add_definitions(-pedantic -Wall -O2 -Wfatal-errors)
 set(CMAKE_CXX_STANDARD 11)
 
 add_library(boost_arena
-	obstack.cpp
+    obstack.cpp
 )
 target_link_libraries(boost_arena)
 
 
 add_executable(arena_test
-	arena_test.cpp
+    arena_test.cpp
 )
 
 target_link_libraries(arena_test
-	boost_arena
-	"${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}"
+    boost_arena
+    "${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}"
 )
 
 add_executable(arena_benchmark
-	arena_benchmark.cpp
+    arena_benchmark.cpp
 )
 
 target_link_libraries(arena_benchmark
-	boost_arena
+    boost_arena
 )
