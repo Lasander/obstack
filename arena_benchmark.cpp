@@ -357,11 +357,11 @@ static void benchmark_threaded(
 			threads.create_thread(
 				std::bind(
 					benchmark_malloc,
-					boost::ref(start_allocs),
-					boost::ref(alloc_orders[i]),
-					boost::ref(free_orders[i]),
+					std::ref(start_allocs),
+					std::ref(alloc_orders[i]),
+					std::ref(free_orders[i]),
 					per_thread_iterations,
-					boost::ref(timings)
+					std::ref(timings)
 				)
 			);
 		}
@@ -376,11 +376,11 @@ static void benchmark_threaded(
 			threads.create_thread(
 				std::bind(
 					benchmark_new_delete,
-					boost::ref(start_allocs),
-					boost::ref(alloc_orders[i]),
-					boost::ref(free_orders[i]),
+					std::ref(start_allocs),
+					std::ref(alloc_orders[i]),
+					std::ref(free_orders[i]),
 					per_thread_iterations,
-					boost::ref(timings)
+					std::ref(timings)
 				)
 			);
 		}
@@ -395,11 +395,11 @@ static void benchmark_threaded(
 			threads.create_thread(
 				std::bind(
 					benchmark_obstack,
-					boost::ref(start_allocs),
-					boost::ref(alloc_orders[i]),
-					boost::ref(free_orders[i]),
+					std::ref(start_allocs),
+					std::ref(alloc_orders[i]),
+					std::ref(free_orders[i]),
 					per_thread_iterations,
-					boost::ref(timings)
+					std::ref(timings)
 				)
 			);
 		}
