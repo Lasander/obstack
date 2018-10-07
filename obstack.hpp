@@ -5,7 +5,6 @@
 #include <memory>
 
 #include <boost/utility.hpp>
-#include <boost/static_assert.hpp>
 #include <type_traits>
 
 #include "obstack_fwd.hpp"
@@ -117,7 +116,7 @@ struct octet_holder {
 	typedef typename allocator_type::value_type alloc_value_type;
 	typedef typename allocator_type::pointer alloc_pointer;
 
-	BOOST_STATIC_ASSERT_MSG(
+	static_assert(
 		std::alignment_of<alloc_value_type>::value == std::alignment_of<max_align_t>::value,
 		"the allocator and memory must be of max_align_t type"
 	);
@@ -373,7 +372,7 @@ public:
 	 */
 	template<typename T>
 	T* alloc_array(size_type num_elements) {
-		BOOST_STATIC_ASSERT_MSG(std::is_pod<T>::value, "T must be a POD type.");
+		static_assert(std::is_pod<T>::value, "T must be a POD type.");
 		const size_type array_bytes = sizeof(T)*num_elements;
 		const size_type align_to = alignment<T>::value; 
 		if( mem_available<T>(num_elements) ) {
