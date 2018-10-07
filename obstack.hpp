@@ -6,8 +6,8 @@
 
 #include <boost/utility.hpp>
 #include <boost/type_traits/alignment_of.hpp>
-#include <boost/type_traits/is_pod.hpp>
 #include <boost/static_assert.hpp>
+#include <type_traits>
 
 #include "obstack_fwd.hpp"
 #include "max_alignment_type.hpp"
@@ -374,7 +374,7 @@ public:
 	 */
 	template<typename T>
 	T* alloc_array(size_type num_elements) {
-		BOOST_STATIC_ASSERT_MSG( is_pod<T>::value, "T must be a POD type.");
+		BOOST_STATIC_ASSERT_MSG(std::is_pod<T>::value, "T must be a POD type.");
 		const size_type array_bytes = sizeof(T)*num_elements;
 		const size_type align_to = alignment<T>::value; 
 		if( mem_available<T>(num_elements) ) {
