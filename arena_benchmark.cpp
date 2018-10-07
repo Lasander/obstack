@@ -78,8 +78,8 @@ size_t sum_vec(const alloc_order_vec &seq) {
 
 class timing_registry {
 private:
-	typedef boost::mutex mutex_type;
-	typedef boost::lock_guard<mutex_type> lock_type;	
+	typedef std::mutex mutex_type;
+	typedef std::lock_guard<mutex_type> lock_type;
 public:
 	enum benchmark {
 		BENCHMARK_OBSTACK = 0,
