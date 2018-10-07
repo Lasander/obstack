@@ -1,6 +1,7 @@
 #ifndef BOOST_OBSTACK_HPP
 #define BOOST_OBSTACK_HPP
 
+#include <cassert>
 #include <cstddef>
 #include <memory>
 
@@ -84,7 +85,7 @@ struct memory_holder {
 		memory(allocator.allocate(capacity)),
 		memory_count(capacity)
 	{
-		BOOST_ASSERT_MSG(memory != NULL, "allocate failed");
+		assert((memory != NULL) && "allocate failed");
 	}
 
 	~memory_holder() {
@@ -257,8 +258,8 @@ public:
 		top_chunk(NULL),
 		memory(capacity, a)
 	{
-		BOOST_ASSERT_MSG(capacity, "obstack with capacity of 0 requested");
-		BOOST_ASSERT_MSG(memory.mem(), "global_malloc_allocator returned NULL");
+	    assert(capacity && "obstack with capacity of 0 requested");
+	    assert(memory.mem() && "global_malloc_allocator returned NULL");
 		tos = memory.mem();
 	}
 
@@ -275,8 +276,8 @@ public:
 			buffer_size,
 			a)
 	{
-		BOOST_ASSERT_MSG(buffer, "supplied buffer is NULL");
-		BOOST_ASSERT_MSG(buffer_size, "supplied buffer_size is 0");
+	    assert(buffer && "supplied buffer is NULL");
+	    assert(buffer_size && "supplied buffer_size is 0");
 		tos = memory.mem();
 	}
 
@@ -621,7 +622,7 @@ private:
 	 * \brief mark an item on the obstack as free and decrypt the dtor pointer
 	 */
 	dtor_fptr mark_as_destructed(chunk_header * const chead) const {
-		BOOST_ASSERT_MSG(is_valid(chead), "invalid destruction detected");
+		assert(is_valid(chead) && "invalid destruction detected");
 		if(is_valid(chead)) {
 			dtor_fptr const dtor = xor_fptr(chead->dtor);
 			chead->dtor = arena_detail::free_marker_dtor_xor;
