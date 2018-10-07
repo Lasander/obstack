@@ -3,6 +3,7 @@
 #include <functional>
 #include <iostream>
 #include <random>
+#include <thread>
 #include <vector>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -289,6 +290,31 @@ static void benchmark_new_delete(
 	}
 }
 
+/** Helper for joining a group of threads */
+class thread_group
+{
+    std::vector<std::thread> threads_;
+public:
+    thread_group() :  threads_{} {}
+
+    template <typename F>
+    void create_thread(F&& f)
+    {
+        threads_.emplace_back(std::forward<F>(f));
+    }
+
+    void join_all()
+    {
+        for (auto& thread : threads_)
+        {
+            if (thread.joinable())
+            {
+                thread.join();
+            }
+        }
+    }
+};
+
 static void benchmark_threaded(
 	const size_t num_threads,
 	const size_t total_memory,
@@ -325,7 +351,7 @@ static void benchmark_threaded(
 	
 	//malloc
 	{
-		boost::thread_group threads;
+		thread_group threads;
 		boost::barrier start_allocs(num_threads);
 		for(size_t i=0; i<num_threads; i++) {
 			threads.create_thread(
@@ -344,7 +370,7 @@ static void benchmark_threaded(
 	
 	//new_delete
 	{
-		boost::thread_group threads;
+		thread_group threads;
 		boost::barrier start_allocs(num_threads);
 		for(size_t i=0; i<num_threads; i++) {
 			threads.create_thread(
@@ -363,7 +389,7 @@ static void benchmark_threaded(
 
 	//obstack
 	{
-		boost::thread_group threads;
+		thread_group threads;
 		boost::barrier start_allocs(num_threads);
 		for(size_t i=0; i<num_threads; i++) {
 			threads.create_thread(
