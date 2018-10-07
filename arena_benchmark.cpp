@@ -1,18 +1,16 @@
 #include <cstdlib>
 
+#include <chrono>
 #include <functional>
 #include <iostream>
 #include <random>
 #include <thread>
 #include <vector>
 
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread.hpp>
 
 #include "obstack.hpp"
 #include "max_alignment_type.hpp"
-
-using namespace boost::posix_time;
 
 typedef std::vector<size_t> alloc_order_vec;
 
@@ -87,7 +85,9 @@ public:
 		BENCHMARK_NEW_DELETE = 2
 	};
 
-	void account(benchmark which, const time_duration &how_long) {
+	using time_duration = std::chrono::microseconds;
+
+	void account(benchmark which, const time_duration& how_long) {
 		lock_type lock(mutexes[to_index(which)]);
 		durations[to_index(which)] += how_long;
 	}
@@ -128,7 +128,7 @@ static void benchmark_malloc(
 	
 	start_allocs.wait();
 
-	ptime start(microsec_clock::universal_time());
+	const auto start = std::chrono::high_resolution_clock::now();
 	
 	for(size_t i=0; i<iterations; i++) {
 		//1. in order alloc/free
@@ -165,9 +165,9 @@ static void benchmark_malloc(
 		}
 	}
 
-	ptime end(microsec_clock::universal_time());
+    const auto end = std::chrono::high_resolution_clock::now();
 
-	timings.account(timing_registry::BENCHMARK_MALLOC_FREE, end-start);
+	timings.account(timing_registry::BENCHMARK_MALLOC_FREE, std::chrono::duration_cast<timing_registry::time_duration>(end-start));
 }
 
 
@@ -187,7 +187,7 @@ static void benchmark_obstack(
 	
 	start_allocs.wait();
 	
-	ptime start(microsec_clock::universal_time());
+	const auto start = std::chrono::high_resolution_clock::now();
 
 	for(size_t i=0; i<iterations; i++) {
 		//1. in order alloc/free
@@ -224,9 +224,9 @@ static void benchmark_obstack(
 		}
 	}
 
-	ptime end(microsec_clock::universal_time());
+	const auto end = std::chrono::high_resolution_clock::now();
 
-	timings.account(timing_registry::BENCHMARK_OBSTACK, end-start);
+	timings.account(timing_registry::BENCHMARK_OBSTACK, std::chrono::duration_cast<timing_registry::time_duration>(end-start));
 }
 
 static void benchmark_new_delete(
@@ -243,7 +243,7 @@ static void benchmark_new_delete(
 	try {
 		start_allocs.wait();
 
-		ptime start(microsec_clock::universal_time());
+		const auto start = std::chrono::high_resolution_clock::now();
 
 		for(size_t i=0; i<iterations; i++) {
 			//1. in order alloc/free
@@ -280,9 +280,9 @@ static void benchmark_new_delete(
 			}
 		}
 		
-		ptime end(microsec_clock::universal_time());
+		const auto end = std::chrono::high_resolution_clock::now();
 
-		timings.account(timing_registry::BENCHMARK_NEW_DELETE, end-start);
+		timings.account(timing_registry::BENCHMARK_NEW_DELETE, std::chrono::duration_cast<timing_registry::time_duration>(end-start));
 
 	} catch(std::bad_alloc&) {
 		std::cerr << "bad_alloc in new/delete benchmark" << std::endl;
@@ -410,12 +410,12 @@ static void benchmark_threaded(
 	//print statistics
 	std::cout << "  done!" << std::endl;
 	std::cout << "  timings:" << std::endl;
-  std::cout << "              malloc/free heap: " <<
-		timings.get(timing_registry::BENCHMARK_MALLOC_FREE).total_milliseconds() << "ms" << std::endl;
+    std::cout << "              malloc/free heap: " <<
+        std::chrono::duration_cast<std::chrono::milliseconds>(timings.get(timing_registry::BENCHMARK_MALLOC_FREE)).count() << "ms" << std::endl;
 	std::cout << "               new/delete heap: " <<
-		timings.get(timing_registry::BENCHMARK_NEW_DELETE).total_milliseconds() << "ms" << std::endl;
+	    std::chrono::duration_cast<std::chrono::milliseconds>(timings.get(timing_registry::BENCHMARK_NEW_DELETE)).count() << "ms" << std::endl;
 	std::cout << "                 obstack arena: " <<
-		timings.get(timing_registry::BENCHMARK_OBSTACK).total_milliseconds() << "ms" << std::endl;
+	    std::chrono::duration_cast<std::chrono::milliseconds>(timings.get(timing_registry::BENCHMARK_OBSTACK)).count() << "ms" << std::endl;
 	std::cout << std::endl;
 }
 
