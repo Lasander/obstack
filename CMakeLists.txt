@@ -1,10 +1,12 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 find_package(Boost COMPONENTS random unit_test_framework thread system REQUIRED)
 
 
 add_definitions(-pedantic -Wall -O2 -Wfatal-errors)
 #add_definitions(-pedantic -Wall -O0 -ggdb)
+
+set(CMAKE_CXX_STANDARD 11)
 
 add_library(boost_arena
 	obstack.cpp
