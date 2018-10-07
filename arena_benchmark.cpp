@@ -7,8 +7,6 @@
 #include <thread>
 #include <vector>
 
-#include <boost/thread.hpp>
-
 #include "obstack.hpp"
 #include "max_alignment_type.hpp"
 
@@ -105,6 +103,28 @@ private:
 	
 };
 
+/** Helper to wait for a (one time) barrier */
+class barrier
+{
+    std::mutex mutex_;
+    std::condition_variable cv_;
+    std::size_t count_;
+public:
+    explicit barrier(std::size_t count) : mutex_{}, cv_{}, count_{count} {}
+
+    void wait()
+    {
+        std::unique_lock<std::mutex> lock(mutex_);
+        if (--count_ == 0)
+        {
+            cv_.notify_all();
+        }
+        else
+        {
+            cv_.wait(lock, [this] { return count_ == 0; });
+        }
+    }
+};
 
 //this function keeps the optimizer from optimizing away the allocation benchmarking code
 //and does error checking for failed allocations
@@ -117,7 +137,7 @@ static inline void check_alloc(volatile char *p, const char *file, int line, con
 #define CHECK_ALLOC(p) check_alloc(p, __FILE__, __LINE__, __FUNCTION__);
 
 static void benchmark_malloc(
-	boost::barrier &start_allocs,
+	barrier& start_allocs,
 	const alloc_order_vec &alloc_seq,
 	const alloc_order_vec &free_seq,
 	const size_t iterations,
@@ -172,7 +192,7 @@ static void benchmark_malloc(
 
 
 static void benchmark_obstack(
-	boost::barrier &start_allocs,
+	barrier &start_allocs,
 	const alloc_order_vec &alloc_seq,
 	const alloc_order_vec &free_seq,
 	const size_t iterations,
@@ -230,7 +250,7 @@ static void benchmark_obstack(
 }
 
 static void benchmark_new_delete(
-	boost::barrier &start_allocs,
+	barrier &start_allocs,
 	const alloc_order_vec &alloc_seq,
 	const alloc_order_vec &free_seq,
 	const size_t iterations,
@@ -352,7 +372,7 @@ static void benchmark_threaded(
 	//malloc
 	{
 		thread_group threads;
-		boost::barrier start_allocs(num_threads);
+		barrier start_allocs(num_threads);
 		for(size_t i=0; i<num_threads; i++) {
 			threads.create_thread(
 				std::bind(
@@ -371,7 +391,7 @@ static void benchmark_threaded(
 	//new_delete
 	{
 		thread_group threads;
-		boost::barrier start_allocs(num_threads);
+		barrier start_allocs(num_threads);
 		for(size_t i=0; i<num_threads; i++) {
 			threads.create_thread(
 				std::bind(
@@ -390,7 +410,7 @@ static void benchmark_threaded(
 	//obstack
 	{
 		thread_group threads;
-		boost::barrier start_allocs(num_threads);
+		barrier start_allocs(num_threads);
 		for(size_t i=0; i<num_threads; i++) {
 			threads.create_thread(
 				std::bind(
