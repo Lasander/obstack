@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,8 +9,6 @@
 #define BOOST_TEST_MODULE obstack_test
 #include <boost/test/unit_test.hpp>
 #include <boost/function.hpp>
-#include <boost/cstdint.hpp>
-
 
 #include "obstack.hpp"
 #include "max_alignment_type.hpp"
@@ -80,7 +79,7 @@ struct alignment_checker {
 	int c;
 	long d;
 	//long long e;
-	boost::int64_t e;
+	std::int64_t e;
 	bool f;
 	float g;
 	double h;

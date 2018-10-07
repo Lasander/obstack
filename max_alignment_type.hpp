@@ -1,8 +1,8 @@
 #ifndef BOOST_MAXALIGNMENT_TYPE_HPP
 #define BOOST_MAXALIGNMENT_TYPE_HPP
 
+#include <cstdint>
 #include <type_traits>
-#include <boost/cstdint.hpp>
 
 namespace boost {
 namespace arena {
@@ -101,7 +101,7 @@ typedef detail::max_alignof<
 	bool,
 	long,
 	//long long,
-	::boost::int64_t,
+	std::int64_t,
 	float,
 	double,
 	long double,
