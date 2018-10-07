@@ -425,7 +425,7 @@ int main(int argc, char **argv) {
 	const size_t max_alloc_size = 1024*1024* 4;
 	const size_t iterations = 1000;
 	
-	const size_t num_cores = boost::thread::hardware_concurrency();
+	const size_t num_cores = std::thread::hardware_concurrency();
 	std::cout << "global parameters:" << std::endl;
 	std::cout << "           cpu cores: " << num_cores << std::endl;
 	std::cout << "        total memory: " << total_memory / 1024 << "kB" << std::endl;
