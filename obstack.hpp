@@ -294,76 +294,9 @@ public:
      *  - complex types like structs and classes
      * Invalid types for T are:
      *  - arrays like char[42]
-     *
-     * alloc is templated and overloaded for up to 10 arguments.
-     * These are passed as arguments to the constructor of T.
-     * For up to 3 arguments, the constructors are perfect forwarding.
-     * With more than 3 arguments, only const arguments are supported.
      */
-    template<typename T>
-    T* alloc() { return mem_available<T>() ? push<T>() : NULL; }
-    template<typename T, typename T1>
-    T* alloc(const T1 &a1) { return mem_available<T>() ? push<T>(a1) : NULL; }
-    template<typename T, typename T1>
-    T* alloc(T1 &a1) { return mem_available<T>() ? push<T>(a1) : NULL; }
-
-    template<typename T, typename T1, typename T2>
-    T* alloc(const T1 &a1, const T2 &a2) { return mem_available<T>() ? push<T>(a1, a2) : NULL; }
-    template<typename T, typename T1, typename T2>
-    T* alloc(T1 &a1, const T2 &a2) { return mem_available<T>() ? push<T>(a1, a2) : NULL; }
-    template<typename T, typename T1, typename T2>
-    T* alloc(const T1 &a1, T2 &a2) { return mem_available<T>() ? push<T>(a1, a2) : NULL; }
-    template<typename T, typename T1, typename T2>
-    T* alloc(T1 &a1, T2 &a2) { return mem_available<T>() ? push<T>(a1, a2) : NULL; }
-
-    template<typename T, typename T1, typename T2, typename T3>
-    T* alloc(const T1 &a1, const T2 &a2, const T3 &a3) { return mem_available<T>() ? push<T>(a1, a2, a3) : NULL; }
-    template<typename T, typename T1, typename T2, typename T3>
-    T* alloc(T1 &a1, const T2 &a2, const T3 &a3) { return mem_available<T>() ? push<T>(a1, a2, a3) : NULL; }
-    template<typename T, typename T1, typename T2, typename T3>
-    T* alloc(const T1 &a1, T2 &a2, const T3 &a3) { return mem_available<T>() ? push<T>(a1, a2, a3) : NULL; }
-    template<typename T, typename T1, typename T2, typename T3>
-    T* alloc(const T1 &a1, const T2 &a2, T3 &a3) { return mem_available<T>() ? push<T>(a1, a2, a3) : NULL; }
-    template<typename T, typename T1, typename T2, typename T3>
-    T* alloc(const T1 &a1, T2 &a2, T3 &a3) { return mem_available<T>() ? push<T>(a1, a2, a3) : NULL; }
-    template<typename T, typename T1, typename T2, typename T3>
-    T* alloc(T1 &a1, const T2 &a2, T3 &a3) { return mem_available<T>() ? push<T>(a1, a2, a3) : NULL; }
-    template<typename T, typename T1, typename T2, typename T3>
-    T* alloc(T1 &a1, T2 &a2, const T3 &a3) { return mem_available<T>() ? push<T>(a1, a2, a3) : NULL; }
-    template<typename T, typename T1, typename T2, typename T3>
-    T* alloc(T1 &a1, T2 &a2, T3 &a3) { return mem_available<T>() ? push<T>(a1, a2, a3) : NULL; }
-
-    //with more then 3 arguments, binomial explosion really sets in, so we can just support const
-
-    template<typename T, typename T1, typename T2, typename T3, typename T4>
-    T* alloc(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4) {
-        return mem_available<T>() ? push<T>(a1, a2, a3, a4) : NULL;
-    }
-    template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5>
-    T* alloc(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5) {
-        return mem_available<T>() ? push<T>(a1, a2, a3, a4, a5) : NULL;
-    }
-    template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-    T* alloc(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5, const T6 &a6) {
-        return mem_available<T>() ? push<T>(a1, a2, a3, a4, a5, a6) : NULL;
-    }
-    template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
-    T* alloc(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5, const T6 &a6, const T7 &a7) {
-        return mem_available<T>() ? push<T>(a1, a2, a3, a4, a5, a6, a7) : NULL;
-    }
-    template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
-    T* alloc(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5, const T6 &a6, const T7 &a7, const T8 &a8) {
-        return mem_available<T>() ? push<T>(a1, a2, a3, a4, a5, a6, a7, a8) : NULL;
-    }
-    template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
-    T* alloc(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5, const T6 &a6, const T7 &a7, const T8 &a8, const T9 &a9) {
-        return mem_available<T>() ? push<T>(a1, a2, a3, a4, a5, a6, a7, a8, a9) : NULL;
-    }
-    template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9, typename T10>
-    T* alloc(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5, const T6 &a6, const T7 &a7, const T8 &a8, const T9 &a9, const T10 &a10) {
-        return mem_available<T>() ? push<T>(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) : NULL;
-    }
-
+    template<typename T, typename ...Args>
+    T* alloc(Args&&... args) { return mem_available<T>() ? push<T>(std::forward<Args>(args)...) : NULL; }
 
     /**
      * \brief Allocate a linear packed array of elements.
@@ -481,76 +414,12 @@ private:
         return reinterpret_cast<byte_type*>(top_chunk) + max_aligned_sizeof<chunk_header>::value;
     }
 
-    template<typename T>
-    T* push() { allocate<T>(); return new(top_object()) T(); }
-    template<typename T, typename T1>
-    T* push(const T1 &a1) { allocate<T>(); return new(top_object()) T(a1); }
-  template<typename T, typename T1>
-    T* push(T1 &a1) { allocate<T>(); return new(top_object()) T(a1); }
+    template<typename T, typename ...Args>
+    T* push(Args&&... args) {
+        allocate<T>();
+        return new(top_object()) T(std::forward<Args>(args)...);
+    }
 
-  template<typename T, typename T1, typename T2>
-    T* push(const T1 &a1, const T2 &a2) { allocate<T>(); return new(top_object()) T(a1, a2); }
-  template<typename T, typename T1, typename T2>
-    T* push(T1 &a1, const T2 &a2) { allocate<T>(); return new(top_object()) T(a1, a2); }
-  template<typename T, typename T1, typename T2>
-    T* push(const T1 &a1, T2 &a2) { allocate<T>(); return new(top_object()) T(a1, a2); }
-  template<typename T, typename T1, typename T2>
-    T* push(T1 &a1, T2 &a2) { allocate<T>(); return new(top_object()) T(a1, a2); }
-
-  template<typename T, typename T1, typename T2, typename T3>
-    T* push(const T1 &a1, const T2 &a2, const T3 &a3) { allocate<T>(); return new(top_object()) T(a1, a2, a3); }
-  template<typename T, typename T1, typename T2, typename T3>
-    T* push(T1 &a1, const T2 &a2, const T3 &a3) { allocate<T>(); return new(top_object()) T(a1, a2, a3); }
-  template<typename T, typename T1, typename T2, typename T3>
-    T* push(const T1 &a1, T2 &a2, const T3 &a3) { allocate<T>(); return new(top_object()) T(a1, a2, a3); }
-  template<typename T, typename T1, typename T2, typename T3>
-    T* push(const T1 &a1, const T2 &a2, T3 &a3) { allocate<T>(); return new(top_object()) T(a1, a2, a3); }
-  template<typename T, typename T1, typename T2, typename T3>
-    T* push(const T1 &a1, T2 &a2, T3 &a3) { allocate<T>(); return new(top_object()) T(a1, a2, a3); }
-  template<typename T, typename T1, typename T2, typename T3>
-    T* push(T1 &a1, const T2 &a2, T3 &a3) { allocate<T>(); return new(top_object()) T(a1, a2, a3); }
-  template<typename T, typename T1, typename T2, typename T3>
-    T* push(T1 &a1, T2 &a2, const T3 &a3) { allocate<T>(); return new(top_object()) T(a1, a2, a3); }
-  template<typename T, typename T1, typename T2, typename T3>
-    T* push(T1 &a1, T2 &a2, T3 &a3) { allocate<T>(); return new(top_object()) T(a1, a2, a3); }
-
-
-  template<typename T, typename T1, typename T2, typename T3, typename T4>
-    T* push(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4) {
-        allocate<T>();
-        return new(top_object()) T(a1, a2, a3, a4);
-    }
-  template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5>
-    T* push(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5) {
-        allocate<T>();
-        return new(top_object()) T(a1, a2, a3, a4, a5);
-    }
-  template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-    T* push(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5, const T6 &a6) {
-        allocate<T>();
-        return new(top_object()) T(a1, a2, a3, a4, a5, a6);
-    }
-  template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
-    T* push(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5, const T6 &a6, const T7 &a7) {
-        allocate<T>();
-        return new(top_object()) T(a1, a2, a3, a4, a5, a6, a7);
-    }
-  template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
-    T* push(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5, const T6 &a6, const T7 &a7, const T8 &a8) {
-        allocate<T>();
-        return new(top_object()) T(a1, a2, a3, a4, a5, a6, a7, a8);
-    }
-  template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
-    T* push(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5, const T6 &a6, const T7 &a7, const T8 &a8, const T9 &a9) {
-        allocate<T>();
-        return new(top_object()) T(a1, a2, a3, a4, a5, a6, a7, a8, a9);
-    }
-  template<typename T, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9, typename T10>
-    T* push(const T1 &a1, const T2 &a2, const T3 &a3, const T4 &a4, const T5 &a5, const T6 &a6, const T7 &a7, const T8 &a8, const T9 &a9, const T10 &a10) {
-        allocate<T>();
-        return new(top_object()) T(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
-    }
- 
     bool is_valid(const chunk_header * const chead) const {
         bool const is_inside_arena =
             reinterpret_cast<const byte_type*>(chead) >= memory.mem() &&
